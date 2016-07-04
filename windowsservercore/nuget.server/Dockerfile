@@ -1,7 +1,7 @@
 FROM coderobin/windows-build-uwp-461
 MAINTAINER xied75@gmail.com
 
-EXPOSE 8080
+EXPOSE 80
 
 RUN powershell -Command \
     wget https://download.microsoft.com/download/C/E/8/CE8D18F5-D4C0-45B5-B531-ADECD637A1AA/Dev14%20Update%201%20MSIs/iisexpress_amd64_en-US.msi -OutFile iisexpress_amd64_en-US.msi; \
@@ -16,6 +16,9 @@ RUN powershell -Command \
     C:\PortableGit\bin\git.exe clone https://github.com/coderobin/nuget.server.web.git; \
     C:\nuget.exe restore C:\nuget.server.web\NuGet.Server.Web.sln; \
     Start-Process -FilePath 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe' -ArgumentList 'C:\nuget.server.web\NuGet.Server.Web.sln', '/p:Configuration=Release' -PassThru -Wait; \
-    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Aspnet_regiis.exe -ga 'user manager\containeradministrator';
+    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Aspnet_regiis.exe -ga 'user manager\containeradministrator'; \
+    mkdir C:\nuget.server.web\NuGet.Server.Web\Packages;
 
-CMD ["C:\\Program Files\\IIS Express\\iisexpress.exe", "/path:C:\\nuget.server.web\\NuGet.Server.Web", "/systray:false"]
+VOLUME C:/nuget.server.web/NuGet.Server.Web/Packages
+
+CMD ["C:\\Program Files\\IIS Express\\iisexpress.exe", "/config:C:\\nuget.server.web\\hostconfig\\applicationhost.config", "/systray:false"]
