@@ -1,3 +1,23 @@
+### Update 30/12/2016
+
+1.  Change base OS image from TP5 windowsservercore to RTM microsoft/windowsservercore.
+
+2.  Add a Docker Volume of **JENKINS_HOME** and installer will use it properly, previous image mixed Jenkins system files with those files and folders that should live inside JENKINS_HOME.
+
+3.  Although we haven't got our own *tini* solution, we came up a *simple_monitor.ps1* as ENTRYPOINT so that if the Jenkins service dies, the container will stop too.
+
+### Example Usage
+
+```
+docker run -d --ip 172.30.225.13 --name jenkins --hostname jenkins --restart=always -v C:\Users\dong\Documents\Deployments\volumes\jenkins\jenkins_home:C:\JENKINS_HOME coderobin/jenkins:2.19
+```
+
+### Best Practices
+
+**Do not** expose your Jenkins container directly to the world, put an NGINX before it.
+
+### Original README
+
 1.  Naive solution:
  
     One can build a Dockerfile with base image **windowsservercore**, and either install Jenkins by Chocolatey or manually, then call it a day.
