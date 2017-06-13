@@ -1,3 +1,27 @@
+### Tags (i.e. Version history)
+
+1. latest:
+  This is the oldest version even with a "Latest" name, in order to not break people's CI/CD pipeline we kept it for now, it might be removed later since it was using very old base image.
+
+2. srv2016rtm:
+  This one replaced the old base image with RTM base image, but still using Chocolatey for sdk installation.
+
+3. 10.0.10586.212:
+  This one has a proper beautiful name, and no longer using Chocolatey.
+
+
+### What's New:
+
+#### 13/06/2017:
+
+* No longer using Chocolatey for sdk install, downloading from Microsoft directly.
+
+#### 21/12/2016:
+
+* We now using microsoft/windowsservercore as base OS image, instead of TP5 era windowsservercore.
+
+### Contents:
+
 1.  The Problem:  
     When you try to install the SDK, it will stop in the middle leaving you an incomplete state. The hero is *Windows Desktop Extension SDK-x86_en-us.msi*, despite all other 50+ MSIs install perfectly, this guy decided to call *C:\Program Files (x86)\Windows Kits\10\bin\x86\GenerateUnionWinMD.cmd*, within this script we got:
     ```
