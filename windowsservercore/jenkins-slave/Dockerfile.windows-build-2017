@@ -1,4 +1,4 @@
-FROM coderobin/windows-build-uwp-461:latest
+FROM coderobin/windows-build-2017:0.1
 MAINTAINER xied75@gmail.com
 
 VOLUME C:/jenkins
