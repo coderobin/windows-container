@@ -7,10 +7,10 @@ EXPOSE 8080 50000
 VOLUME C:/JENKINS_HOME
 
 COPY noStart.mst C:/
-COPY simple_monitor.ps1 C:/
 
 RUN powershell -Command \
-    wget http://mirrors.jenkins-ci.org/windows-stable/jenkins-%JENKINS_VERSION%.zip -OutFile \jenkins-%JENKINS_VERSION%.zip; \
+    Invoke-WebRequest -UseBasicParsing -Uri "https://dotnetbinaries.blob.core.windows.net/servicemonitor/2.0.1.3/ServiceMonitor.exe" -OutFile \ServiceMonitor.exe; \
+    Invoke-WebRequest http://mirrors.jenkins-ci.org/windows-stable/jenkins-%JENKINS_VERSION%.zip -OutFile \jenkins-%JENKINS_VERSION%.zip; \
     Expand-Archive -Path \jenkins-%JENKINS_VERSION%.zip -DestinationPath /; \
     Start-Process -FilePath msiexec.exe -ArgumentList /i, jenkins.msi, TRANSFORMS=noStart.mst, /qn, /L, jenkins.install.log -PassThru -Wait; \
     rm \jenkins-%JENKINS_VERSION%.zip; \
@@ -20,4 +20,4 @@ RUN powershell -Command \
     $xml.service.env.value = \"%JENKINS_HOME%\"; \
     $xml.Save(\"%ProgramFiles(x86)%\Jenkins\Jenkins.xml\");
 
-ENTRYPOINT ["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "c:\\simple_monitor.ps1"]
+ENTRYPOINT ["C:\\ServiceMonitor.exe", "jenkins"]
