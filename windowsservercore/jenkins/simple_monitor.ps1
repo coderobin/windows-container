@@ -1,6 +1,6 @@
 while($true)
 {
-  sleep -Seconds 10
+  Start-Sleep -Seconds 10
 
   $status = (Get-Service -Name Jenkins).Status
 
