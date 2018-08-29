@@ -21,7 +21,7 @@ RUN New-Item -Type Directory c:\install_logs; `
     Invoke-WebRequest -UseBasicParsing https://download.visualstudio.microsoft.com/download/pr/c6e2b90d-9051-44bd-aef1-4ef3bdf8f084/30b5724c490239eee9608d63225b994f/vs_buildtools.exe -OutFile vs_buildtools.exe; `
     # Installer won't detect DOTNET_SKIP_FIRST_TIME_EXPERIENCE if ENV is used, must use setx /M
     setx /M DOTNET_SKIP_FIRST_TIME_EXPERIENCE 1; `
-    Start-Process -FilePath 'C:\vs_buildtools.exe' -ArgumentList '--add', 'Microsoft.VisualStudio.Workload.MSBuildTools', '--quiet', '--norestart', '--nocache' -NoNewWindow -Wait; `
+    Start-Process -FilePath 'C:\vs_buildtools.exe' -ArgumentList '--add', 'Microsoft.VisualStudio.Workload.MSBuildTools', '--add', 'Microsoft.VisualStudio.Component.NuGet.BuildTools', '--quiet', '--norestart', '--nocache' -NoNewWindow -Wait; `
     Remove-Item vs_buildtools.exe; `
     Remove-Item -Force -Recurse \"${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\"; `
     Remove-Item -Force -Recurse ${Env:TEMP}\*;
