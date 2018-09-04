@@ -1,16 +1,28 @@
+# escape=`
+
 FROM microsoft/windowsservercore:10.0.14393.2312
 LABEL maintainer="xied75@gmail.com"
 
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
 ENV NGINX_VERSION 1.14.0
 
-RUN setx PATH %PATH%;C:\nginx-%NGINX_VERSION%;
-EXPOSE 80 443
+RUN `
+    Invoke-WebRequest -UseBasicParsing http://nginx.org/download/nginx-$Env:NGINX_VERSION.zip -outfile \nginx-$Env:NGINX_VERSION.zip; `
+    Expand-Archive -Path \nginx-$Env:NGINX_VERSION.zip -DestinationPath /; `
+    Remove-Item /nginx-$Env:NGINX_VERSION.zip; `
+    New-Item -Type Directory \nginx-$Env:NGINX_VERSION\conf\sites-available; `
+    New-Item -Type Directory \nginx-$Env:NGINX_VERSION\conf\sites-enabled; `
+    Rename-Item \nginx-$Env:NGINX_VERSION\conf\nginx.conf nginx.conf.original;
 
-RUN powershell -Command \
-    Invoke-WebRequest http://nginx.org/download/nginx-%NGINX_VERSION%.zip -outfile \nginx-%NGINX_VERSION%.zip; \
-    Expand-Archive -Path \nginx-%NGINX_VERSION%.zip -DestinationPath /; \
-    rm /nginx-%NGINX_VERSION%.zip
+COPY nginx.conf \nginx-$NGINX_VERSION\conf\
+COPY default.conf \nginx-$NGINX_VERSION\conf\sites-enabled\
+
+RUN setx /M PATH $(${Env:PATH} `
+    + \";C:\nginx-${Env:NGINX_VERSION}\");
+
+EXPOSE 80 443
 
 WORKDIR C:/nginx-$NGINX_VERSION
 
-CMD c:/nginx-%NGINX_VERSION%/nginx.exe
+CMD ["nginx.exe"]
