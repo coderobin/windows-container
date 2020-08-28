@@ -17,8 +17,8 @@ RUN powershell -Command \
     Set-Acl C:\Windows\System32\net.exe -AclObject $acl11; \
     $acl21.SetAccessRule($accessRule); \
     Set-Acl C:\Windows\SysWOW64\net.exe -AclObject $acl21; \
-    Copy $env:temp\fakenet64.exe C:\Windows\System32\net.exe; \
-    Copy $env:temp\fakenet.exe C:\Windows\SysWOW64\net.exe; \
+    Copy $env:temp\fakenet.exe C:\Windows\System32\net.exe; \
+    Copy $env:temp\fakenet64.exe C:\Windows\SysWOW64\net.exe; \
     wget http://download.microsoft.com/download/2/1/2/2122BA8F-7EA6-4784-9195-A8CFB7E7388E/StandaloneSDK/sdksetup.exe -OutFile sdksetup.exe; \
     Start-Process -FilePath "C:\sdksetup.exe" -ArgumentList /Quiet, /NoRestart, /Log, c:\install_logs\sdksetup.log -PassThru -Wait; \
     rm sdksetup.exe; \
